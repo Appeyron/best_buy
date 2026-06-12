@@ -1,20 +1,114 @@
+"""Best Buy store application.
+
+Provides a command-line interface for browsing products,
+viewing inventory, and placing orders.
+"""
+
 import products
 import store
 
 
-def start(best_buy):
-    """Display the store menu."""
+def list_products(best_buy):
+    """List all active products."""
 
-    print("Store Menu")
-    print("----------")
-    print("1. List all products in store")
-    print("2. Show total amount in store")
-    print("3. Make an order")
-    print("4. Quit")
+    print("------")
+
+    for index, product in enumerate(
+        best_buy.get_all_products(),
+        start=1
+    ):
+        print(f"{index}. {product.show()}")
+
+    print("------")
+
+
+def show_total_amount(best_buy):
+    """Show total quantity in store."""
+
+    total = best_buy.get_total_quantity()
+
+    print(f"Total of {total} items in store")
+
+
+def make_order(best_buy):
+    """Make an order."""
+
+    print("------")
+
+    products_list = best_buy.get_all_products()
+
+    for index, product in enumerate(products_list, start=1):
+        print(f"{index}. {product.show()}")
+
+    print("------")
+    print("When you want to finish order, enter empty text.")
+
+    shopping_list = []
+
+    while True:
+        product_number = input("Which product # do you want? ")
+
+        if product_number == "":
+            input("What amount do you want? ")
+            break
+
+        quantity = input("What amount do you want? ")
+
+        product = products_list[int(product_number) - 1]
+
+        shopping_list.append((product, int(quantity)))
+
+        print("Product added to list!\n")
+
+    total_price = best_buy.order(shopping_list)
+
+    print("********")
+    print(f"Order made! Total payment: ${total_price}")
+
+
+def quit_program(_best_buy):
+    """Quit application."""
+
+    print("Goodbye!")
+    return False
+
+
+def start(best_buy):
+    """Display and handle menu."""
+
+    menu_actions = {
+        "1": list_products,
+        "2": show_total_amount,
+        "3": make_order,
+        "4": quit_program,
+    }
+
+    running = True
+
+    while running:
+        print("\nStore Menu")
+        print("----------")
+        print("1. List all products in store")
+        print("2. Show total amount in store")
+        print("3. Make an order")
+        print("4. Quit")
+
+        choice = input("Please choose a number: ").strip()
+
+        action = menu_actions.get(choice)
+
+        if action is None:
+            print("Invalid choice.")
+            continue
+
+        result = action(best_buy)
+
+        if result is False:
+            running = False
 
 
 def main():
-    """Initialize store."""
+    """Initialize store and start menu."""
 
     product_list = [
         products.Product(
