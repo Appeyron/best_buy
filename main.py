@@ -46,24 +46,52 @@ def make_order(best_buy):
     shopping_list = []
 
     while True:
-        product_number = input("Which product # do you want? ")
+        try:
+            product_number = input(
+                "Which product # do you want? "
+            ).strip()
 
-        if product_number == "":
-            input("What amount do you want? ")
-            break
+            if product_number == "":
+                input("What amount do you want? ")
+                break
 
-        quantity = input("What amount do you want? ")
+            product_index = int(product_number) - 1
 
-        product = products_list[int(product_number) - 1]
+            if (
+                product_index < 0
+                or product_index >= len(products_list)
+            ):
+                print("Invalid product number.\n")
+                continue
 
-        shopping_list.append((product, int(quantity)))
+            quantity = int(
+                input("What amount do you want? ")
+            )
 
-        print("Product added to list!\n")
+            product = products_list[product_index]
 
-    total_price = best_buy.order(shopping_list)
+            shopping_list.append(
+                (product, quantity)
+            )
 
-    print("********")
-    print(f"Order made! Total payment: ${total_price}")
+            print("Product added to list!\n")
+
+        except ValueError:
+            print(
+                "Please enter a valid number.\n"
+            )
+
+    try:
+        total_price = best_buy.order(shopping_list)
+
+        print("********")
+        print(
+            f"Order made! "
+            f"Total payment: ${total_price}"
+        )
+
+    except ValueError as error:
+        print(f"Order failed: {error}")
 
 
 def quit_program(_best_buy):
@@ -110,27 +138,34 @@ def start(best_buy):
 def main():
     """Initialize store and start menu."""
 
-    product_list = [
-        products.Product(
-            "MacBook Air M2",
-            price=1450,
-            quantity=100
-        ),
-        products.Product(
-            "Bose QuietComfort Earbuds",
-            price=250,
-            quantity=500
-        ),
-        products.Product(
-            "Google Pixel 7",
-            price=500,
-            quantity=250
-        )
-    ]
+    try:
+        product_list = [
+            products.Product(
+                "MacBook Air M2",
+                price=1450,
+                quantity=100
+            ),
+            products.Product(
+                "Bose QuietComfort Earbuds",
+                price=250,
+                quantity=500
+            ),
+            products.Product(
+                "Google Pixel 7",
+                price=500,
+                quantity=250
+            )
+        ]
 
-    best_buy = store.Store(product_list)
+        best_buy = store.Store(product_list)
 
-    start(best_buy)
+        start(best_buy)
+
+    except ValueError as error:
+        print(f"Application error: {error}")
+
+    except Exception as error:
+        print(f"Unexpected error: {error}")
 
 
 if __name__ == "__main__":
