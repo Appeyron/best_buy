@@ -3,18 +3,37 @@
 Provides the Store class for managing products and orders.
 """
 
+import products
+
+
 class Store:
     """Represents a store that contains products."""
 
     def __init__(self, product_list):
+        if not isinstance(product_list, list):
+            raise TypeError("product_list must be a list.")
+
+        for product in product_list:
+            if not isinstance(product, products.Product):
+                raise TypeError(
+                    "All items in product_list must be Product instances."
+                )
+
         self.products = product_list
 
     def add_product(self, product):
-        """Add a product to the store."""
+        if not isinstance(product, products.Product):
+            raise TypeError("product must be a Product instance.")
+
         self.products.append(product)
 
     def remove_product(self, product):
-        """Remove a product from the store."""
+        if not isinstance(product, products.Product):
+            raise TypeError("product must be a Product instance.")
+
+        if product not in self.products:
+            raise ValueError("Product not found in store.")
+
         self.products.remove(product)
 
     def get_total_quantity(self):
