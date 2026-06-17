@@ -22,12 +22,29 @@ class Store:
         self.products = product_list
 
     def add_product(self, product):
+        """Add a product to the store inventory.
+
+        Args:
+            product (Product): The product instance to be added.
+
+        Raises:
+            TypeError: If the provided product is not a Product instance.
+        """
         if not isinstance(product, products.Product):
             raise TypeError("product must be a Product instance.")
 
         self.products.append(product)
 
     def remove_product(self, product):
+        """Remove a product from the store inventory.
+
+        Args:
+            product (Product): The product instance to be removed.
+
+        Raises:
+            TypeError: If the provided product is not a Product instance.
+            ValueError: If the product is not found in the store.
+        """
         if not isinstance(product, products.Product):
             raise TypeError("product must be a Product instance.")
 

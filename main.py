@@ -34,7 +34,8 @@ def make_order(best_buy):
     shopping_list = []
 
     while True:
-        user_input = input("\nWhich product # do you want? (Enter = finish, 'l' = list products): ").strip().lower()
+        user_input = input("\nWhich product # do you want? "
+                           "(Enter = finish, 'l' = list products): ").strip().lower()
 
         # 1. Exit condition
         if not user_input:
@@ -129,10 +130,8 @@ def main():
         best_buy = store.Store(product_list)
         start(best_buy)
 
-    except ValueError as error:
-        print(f"Application error: {error}")
-    except Exception as error:
-        print(f"Unexpected error: {error}")
+    except (ValueError, TypeError) as error:
+        print(f"Initialization error: {error}")
 
 
 if __name__ == "__main__":
